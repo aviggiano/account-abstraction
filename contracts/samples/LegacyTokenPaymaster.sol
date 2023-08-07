@@ -25,13 +25,15 @@ contract LegacyTokenPaymaster is BasePaymaster, ERC20 {
 
     address public immutable theFactory;
 
-    constructor(address accountFactory, string memory _symbol, IEntryPoint _entryPoint) ERC20(_symbol, _symbol) BasePaymaster(_entryPoint) {
+    constructor(address accountFactory, string memory _symbol, IEntryPoint _entryPoint, address owner) ERC20(_symbol, _symbol) BasePaymaster(_entryPoint) {
         theFactory = accountFactory;
         //make it non-empty
         _mint(address(this), 1);
 
         //owner is allowed to withdraw tokens from the paymaster's balance
-        _approve(address(this), msg.sender, type(uint).max);
+        _approve(address(this), owner, type(uint).max);
+
+        transferOwnership(owner);
     }
 
 
